@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 0,
+  "id": "customitems",
+  "name": "CustomItems",
+  "version": "${version}",
+  "authors": [
+    "Nelonn"
+  ],
+  "entrypoint": "me.nelonn.customitems.Main",
+  "mixins": [
+    "customitems.mixins.json"
+  ]
+}
