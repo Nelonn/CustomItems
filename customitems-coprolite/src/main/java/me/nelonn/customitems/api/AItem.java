@@ -16,6 +16,7 @@
 
 package me.nelonn.customitems.api;
 
+import me.nelonn.flint.path.Key;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -44,5 +45,7 @@ public interface AItem {
     void inventoryTick(@NotNull AItemStack stack, @NotNull Level world, @NotNull Entity entity, int slot, boolean selected);
 
     boolean isFireResistant(@NotNull AItemStack stack);
+
+    @NotNull Key getKey();
 
 }

@@ -61,8 +61,8 @@ public abstract class DefaultNestedItem implements NestedItem {
         return stack.getTrueItem().isFireResistant(stack);
     }
 
-    @NotNull
-    public Key getKey() {
+    @Override
+    public @NotNull Key getKey() {
         return CustomItemsAPI.get().itemRegistry().getKeyOptional(this).orElseThrow(() ->
                 new RuntimeException("Item type '" + this.getClass().getName() + "' is not registered"));
     }

@@ -19,8 +19,10 @@ package me.nelonn.customitems;
 import me.nelonn.customitems.api.AItemStack;
 import me.nelonn.customitems.api.TrueItem;
 import me.nelonn.customitems.utility.ItemMixinAccess;
+import me.nelonn.flint.path.Key;
 import net.minecraft.Util;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -89,7 +91,13 @@ public class ItemWrapper implements TrueItem {
     }
 
     @Override
+    public @NotNull Key getKey() {
+        ResourceLocation location = BuiltInRegistries.ITEM.getKey(this.handle);
+        return Key.of(location.getNamespace(), location.getPath());
+    }
+
+    @Override
     public String toString() {
-        return BuiltInRegistries.ITEM.getKey(this.handle).toString();
+        return getKey().toString();
     }
 }
