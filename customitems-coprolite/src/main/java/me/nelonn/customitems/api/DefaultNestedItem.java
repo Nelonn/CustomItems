@@ -17,6 +17,7 @@
 package me.nelonn.customitems.api;
 
 import me.nelonn.flint.path.Key;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -59,6 +60,12 @@ public abstract class DefaultNestedItem implements NestedItem {
     @Override
     public boolean isFireResistant(@NotNull AItemStack stack) {
         return stack.getTrueItem().isFireResistant(stack);
+    }
+
+    @Override
+    public @NotNull Component getDescription() {
+        Key key = getKey();
+        return Component.translatable("item." + key.namespace() + "." + key.value());
     }
 
     @Override

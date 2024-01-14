@@ -22,6 +22,7 @@ import me.nelonn.customitems.utility.ItemMixinAccess;
 import me.nelonn.flint.path.Key;
 import net.minecraft.Util;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -88,6 +89,11 @@ public class ItemWrapper implements TrueItem {
     @Override
     public boolean isFireResistant(@NotNull AItemStack stack) {
         return this.handle.isFireResistant();
+    }
+
+    @Override
+    public @NotNull Component getDescription() {
+        return this.handle.getDescription();
     }
 
     @Override
