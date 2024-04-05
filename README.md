@@ -19,7 +19,7 @@ public final class Items {
 public class ExampleItem extends DefaultNestedItem {
     private final boolean property;
 
-    public WrenchItem(boolean property) {
+    public ExampleItem(boolean property) {
         this.property = property;
     }
 
