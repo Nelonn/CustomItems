@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Michael Neonov
+ * Copyright 2024 Michael Neonov <two.nelonn at gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -84,11 +84,6 @@ public class ItemWrapper implements TrueItem {
     @Override
     public void inventoryTick(@NotNull AItemStack stack, @NotNull Level world, @NotNull Entity entity, int slot, boolean selected) {
         this.handle.inventoryTick(stack.unwrap(), world, entity, slot, selected);
-    }
-
-    @Override
-    public boolean isFireResistant(@NotNull AItemStack stack) {
-        return this.handle.isFireResistant();
     }
 
     @Override

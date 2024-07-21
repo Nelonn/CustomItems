@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Michael Neonov
+ * Copyright 2024 Michael Neonov <two.nelonn at gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,11 @@ package me.nelonn.customitems;
 import me.nelonn.customitems.api.*;
 import me.nelonn.customitems.utility.ItemStackMixinAccess;
 import me.nelonn.flint.path.Key;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -53,12 +55,15 @@ public class ItemStackWrapper implements AItemStack {
         return this.handle;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public @NotNull AItem getItem() {
         returnTrueItem:
         {
-            CompoundTag tag = unwrap().getTag();
-            if (tag == null || !tag.contains("id", Tag.TAG_STRING)) break returnTrueItem;
+            CustomData customData = unwrap().get(DataComponents.CUSTOM_DATA);
+            if (customData == null) break returnTrueItem;
+            CompoundTag tag = customData.getUnsafe();
+            if (!tag.contains("id", Tag.TAG_STRING)) break returnTrueItem;
             String idString = tag.getString("id");
             Key key = Key.tryOrNull(idString);
             if (key == null) break returnTrueItem;
@@ -77,11 +82,6 @@ public class ItemStackWrapper implements AItemStack {
     @Override
     public boolean isEmpty() {
         return this.handle.isEmpty();
-    }
-
-    @Override
-    public boolean isFireResistant() {
-        return getItem().isFireResistant(this);
     }
 
     @Override

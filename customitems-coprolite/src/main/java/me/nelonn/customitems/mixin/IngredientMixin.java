@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Michael Neonov
+ * Copyright 2024 Michael Neonov <two.nelonn at gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,16 +53,15 @@ public abstract class IngredientMixin {
 
                 // CraftBukkit start
                 if (this.exact) {
-                    if (itemstack1.getItem() == itemstack.getItem() && ItemStack.isSameItemSameTags(itemstack, itemstack1)) {
+                    if (itemstack1.getItem() == itemstack.getItem() && ItemStack.isSameItemSameComponents(itemstack, itemstack1)) {
                         return true;
                     }
 
                     continue;
                 }
                 // CraftBukkit end
-                // CustomItems start
-                if (AItemStack.wrap(itemstack1).getItem() == AItemStack.wrap(itemstack).getItem()) {
-                // CustomItems end
+
+                if (AItemStack.wrap(itemstack1).getItem() == AItemStack.wrap(itemstack).getItem()) { // CustomItems - Prevent using nested items in recipes
                     return true;
                 }
             }

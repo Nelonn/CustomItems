@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Michael Neonov
+ * Copyright 2024 Michael Neonov <two.nelonn at gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@
 package me.nelonn.customitems.api;
 
 import me.nelonn.flint.path.Key;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -24,6 +26,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
@@ -35,10 +38,13 @@ public abstract class DefaultNestedItem implements NestedItem {
     @NotNull
     protected abstract ItemStack createDefaultStack();
 
+    @SuppressWarnings("deprecation")
     @NotNull
     public final AItemStack getDefaultInstance() {
         ItemStack itemStack = createDefaultStack();
-        itemStack.getOrCreateTag().putString("id", getKey().toString());
+        CustomData customData = itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.of(new CompoundTag()));
+        customData.getUnsafe().putString("id", getKey().toString());
+        itemStack.set(DataComponents.CUSTOM_DATA, customData);
         return AItemStack.wrap(itemStack);
     }
 
@@ -55,11 +61,6 @@ public abstract class DefaultNestedItem implements NestedItem {
     @Override
     public void inventoryTick(@NotNull AItemStack stack, @NotNull Level world, @NotNull Entity entity, int slot, boolean selected) {
         stack.getTrueItem().inventoryTick(stack, world, entity, slot, selected);
-    }
-
-    @Override
-    public boolean isFireResistant(@NotNull AItemStack stack) {
-        return stack.getTrueItem().isFireResistant(stack);
     }
 
     @Override

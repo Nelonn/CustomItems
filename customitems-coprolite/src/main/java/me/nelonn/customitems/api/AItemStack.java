@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Michael Neonov
+ * Copyright 2024 Michael Neonov <two.nelonn at gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,8 +41,6 @@ public interface AItemStack {
     TrueItem getTrueItem();
 
     boolean isEmpty();
-
-    boolean isFireResistant();
 
     int getCount();
 

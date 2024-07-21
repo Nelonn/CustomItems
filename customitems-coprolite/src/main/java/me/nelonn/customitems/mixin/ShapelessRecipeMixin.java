@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Michael Neonov
+ * Copyright 2024 Michael Neonov <two.nelonn at gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,11 @@
 
 package me.nelonn.customitems.mixin;
 
-import it.unimi.dsi.fastutil.ints.IntList;
 import me.nelonn.customitems.api.AItemStack;
 import me.nelonn.customitems.utility.CraftUtil;
 import net.minecraft.core.NonNullList;
-import net.minecraft.world.entity.player.StackedContents;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.KnowledgeBookItem;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
@@ -44,20 +41,24 @@ public class ShapelessRecipeMixin {
      * @reason Prevent using nested items in recipes
      */
     @Overwrite
-    public boolean matches(CraftingContainer inventory, Level world) {
-        StackedContents autorecipestackmanager = new StackedContents();
-        autorecipestackmanager.initialize((Recipe<?>) (Object) this); // Paper - better exact choice recipes // CustomItems - Mixin class cast
-        int i = 0;
-
-        for (int j = 0; j < inventory.getContainerSize(); ++j) {
-            ItemStack itemstack = inventory.getItem(j);
-
-            if (!itemstack.isEmpty() && CraftUtil.canBeUsedInCrafts(AItemStack.wrap(itemstack).getItem())) { // CustomItems
-                ++i;
-                autorecipestackmanager.accountStack(itemstack, 1);
+    public boolean matches(CraftingInput input, Level world) {
+        // Paper start - unwrap ternary & better exact choice recipes
+        if (input.ingredientCount() != this.ingredients.size()) {
+            return false;
+        }
+        // CustomItems start
+        for (ItemStack itemStack : input.items()) {
+            if (!CraftUtil.canBeUsedInCrafts(AItemStack.wrap(itemStack).getItem())) {
+                return false;
             }
         }
-
-        return i == this.ingredients.size() && autorecipestackmanager.canCraft((Recipe<?>) (Object) this, (IntList) null); // CustomItems - Mixin class cast
+        // CustomItems end
+        if (input.size() == 1 && this.ingredients.size() == 1) {
+            return this.ingredients.getFirst().test(input.getItem(0));
+        }
+        input.stackedContents().initializeExtras((Recipe<?>) (Object) this, input); // setup stacked contents for this recipe
+        final boolean canCraft = input.stackedContents().canCraft((Recipe<?>) (Object) this, null);
+        input.stackedContents().resetExtras();
+        return canCraft;
     }
 }
