@@ -1,5 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 plugins {
     `java-library`
     id("io.papermc.paperweight.userdev")
@@ -13,6 +11,8 @@ repositories {
     maven("https://maven.fabricmc.net/") // Mixin
 }
 
+paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.MOJANG_PRODUCTION
+
 dependencies {
     paperweight.paperDevBundle(project.properties["paper_build"].toString())
     compileOnly(fileTree("libs/compile"))
@@ -21,26 +21,29 @@ dependencies {
     compileOnly("org.jetbrains:annotations:24.1.0")
 }
 
-tasks.named<JavaCompile>("compileJava") {
+tasks.withType<JavaCompile> {
+    options.release.set(21)
     options.encoding = "UTF-8"
 }
 
-tasks.named<Copy>("processResources") {
-    filteringCharset = "UTF-8"
-    filesMatching("coprolite.plugin.json") {
-        expand("version" to version)
+tasks {
+    processResources {
+        filteringCharset = "UTF-8"
+        filesMatching("coprolite.plugin.json") {
+            expand("version" to version)
+        }
     }
-}
 
-tasks.named<ShadowJar>("shadowJar") {
-    archiveClassifier.set("")
-}
+    shadowJar {
+        archiveClassifier.set("")
+    }
 
-tasks.named("assemble").configure {
-    dependsOn("reobfJar")
-    dependsOn("shadowJar")
-}
+    /*reobfJar {
+        remapperArgs.add("--mixin")
+    }*/
 
-tasks.reobfJar {
-    remapperArgs.add("--mixin")
+    assemble {
+        //dependsOn("reobfJar")
+        dependsOn("shadowJar")
+    }
 }
