@@ -53,15 +53,16 @@ public abstract class IngredientMixin {
 
                 // CraftBukkit start
                 if (this.exact) {
-                    if (itemstack1.getItem() == itemstack.getItem() && ItemStack.isSameItemSameComponents(itemstack, itemstack1)) {
+                    if (itemstack1.getItem() == itemstack.getItem() && ItemStack.isSameItemSameTags(itemstack, itemstack1)) {
                         return true;
                     }
 
                     continue;
                 }
                 // CraftBukkit end
-
-                if (AItemStack.wrap(itemstack1).getItem() == AItemStack.wrap(itemstack).getItem()) { // CustomItems - Prevent using nested items in recipes
+                // CustomItems start
+                if (AItemStack.wrap(itemstack1).getItem() == AItemStack.wrap(itemstack).getItem()) {
+                    // CustomItems end
                     return true;
                 }
             }

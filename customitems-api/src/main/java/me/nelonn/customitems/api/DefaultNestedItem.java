@@ -17,7 +17,6 @@
 package me.nelonn.customitems.api;
 
 import me.nelonn.flint.path.Key;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -26,7 +25,6 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
@@ -38,13 +36,11 @@ public abstract class DefaultNestedItem implements NestedItem {
     @NotNull
     protected abstract ItemStack createDefaultStack();
 
-    @SuppressWarnings("deprecation")
     @NotNull
     public final AItemStack getDefaultInstance() {
         ItemStack itemStack = createDefaultStack();
-        CustomData customData = itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.of(new CompoundTag()));
-        customData.getUnsafe().putString("id", getKey().toString());
-        itemStack.set(DataComponents.CUSTOM_DATA, customData);
+        CompoundTag customData = itemStack.getOrCreateTag();
+        customData.putString("id", getKey().toString());
         return AItemStack.wrap(itemStack);
     }
 

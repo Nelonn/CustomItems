@@ -42,7 +42,7 @@ public class CustomItemsCoprolite implements CustomItemsAPI {
 
     @Override
     public @Nullable AItem item(@NotNull Key key) {
-        return BuiltInRegistries.ITEM.getOptional(ResourceLocation.fromNamespaceAndPath(key.namespace(), key.value()))
+        return BuiltInRegistries.ITEM.getOptional(new ResourceLocation(key.namespace(), key.value()))
                 .map(item -> (AItem) TrueItem.wrap(item))
                 .orElseGet(() -> itemRegistry().get(key));
     }

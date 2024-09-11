@@ -19,11 +19,9 @@ package me.nelonn.customitems;
 import me.nelonn.customitems.api.*;
 import me.nelonn.customitems.utility.ItemStackMixinAccess;
 import me.nelonn.flint.path.Key;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.CustomData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -55,15 +53,12 @@ public class ItemStackWrapper implements AItemStack {
         return this.handle;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public @NotNull AItem getItem() {
         returnTrueItem:
         {
-            CustomData customData = unwrap().get(DataComponents.CUSTOM_DATA);
-            if (customData == null) break returnTrueItem;
-            CompoundTag tag = customData.getUnsafe();
-            if (!tag.contains("id", Tag.TAG_STRING)) break returnTrueItem;
+            CompoundTag tag = unwrap().getTag();
+            if (tag == null || !tag.contains("id", Tag.TAG_STRING)) break returnTrueItem;
             String idString = tag.getString("id");
             Key key = Key.tryOrNull(idString);
             if (key == null) break returnTrueItem;
