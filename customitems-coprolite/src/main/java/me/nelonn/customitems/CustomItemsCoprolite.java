@@ -32,6 +32,7 @@ public class CustomItemsCoprolite implements CustomItemsAPI {
 
     public CustomItemsCoprolite() {
         CoproliteLoader.getInstance().getObjectShare().put(CustomItemsAPI.API, this);
+        CustomItemsAPI.INSTANCE.set(this);
     }
 
     @Override

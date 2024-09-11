@@ -15,7 +15,6 @@ paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArt
 
 dependencies {
     paperweight.paperDevBundle(project.properties["paper_build"].toString())
-    compileOnly(fileTree("../libs/compile"))
     implementation(fileTree("../libs/implement"))
     compileOnly("org.spongepowered:mixin:0.8.5")
     compileOnly("org.jetbrains:annotations:24.1.0")
