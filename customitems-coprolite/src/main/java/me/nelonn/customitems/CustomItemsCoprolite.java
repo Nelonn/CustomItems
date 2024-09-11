@@ -27,8 +27,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
-
 public class CustomItemsCoprolite implements CustomItemsAPI {
     private final NestedItemRegistry nestedItemRegistry = new NestedItemRegistry();
 
