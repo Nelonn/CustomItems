@@ -11,8 +11,6 @@ repositories {
     maven("https://maven.fabricmc.net/") // Mixin
 }
 
-paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.MOJANG_PRODUCTION
-
 dependencies {
     paperweight.paperDevBundle(project.properties["paper_build"].toString())
     compileOnly(fileTree("../libs/compile"))
@@ -40,12 +38,12 @@ tasks {
         archiveClassifier.set("")
     }
 
-    /*reobfJar {
+    reobfJar {
         remapperArgs.add("--mixin")
-    }*/
+    }
 
     assemble {
-        //dependsOn("reobfJar")
+        dependsOn("reobfJar")
         dependsOn("shadowJar")
     }
 }
