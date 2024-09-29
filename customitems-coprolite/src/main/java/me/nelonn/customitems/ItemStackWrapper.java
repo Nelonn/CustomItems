@@ -22,6 +22,7 @@ import me.nelonn.flint.path.Key;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -55,6 +56,9 @@ public class ItemStackWrapper implements AItemStack {
 
     @Override
     public @NotNull AItem getItem() {
+        if (isEmpty()) {
+            return TrueItem.wrap(Items.AIR);
+        }
         returnTrueItem:
         {
             CompoundTag tag = unwrap().getTag();
