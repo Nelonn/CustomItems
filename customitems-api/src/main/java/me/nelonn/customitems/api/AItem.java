@@ -20,11 +20,9 @@ import me.nelonn.flint.path.Key;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Contract;
@@ -41,11 +39,9 @@ public interface AItem {
 
     @NotNull InteractionResult useOn(@NotNull UseOnContext context);
 
-    @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level world, @NotNull Player user, @NotNull InteractionHand hand);
+    @NotNull InteractionResult use(@NotNull Level world, @NotNull Player user, @NotNull InteractionHand hand);
 
     void inventoryTick(@NotNull AItemStack stack, @NotNull Level world, @NotNull Entity entity, int slot, boolean selected);
-
-    @NotNull Component getDescription();
 
     @NotNull Key getKey();
 

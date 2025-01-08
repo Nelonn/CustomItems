@@ -19,10 +19,8 @@ package me.nelonn.customitems.api;
 import me.nelonn.flint.path.Key;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -54,19 +52,13 @@ public abstract class DefaultNestedItem implements NestedItem {
     }
 
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level world, @NotNull Player user, @NotNull InteractionHand hand) {
+    public @NotNull InteractionResult use(@NotNull Level world, @NotNull Player user, @NotNull InteractionHand hand) {
         return user.getItemInHand(hand).getItem().use(world, user, hand);
     }
 
     @Override
     public void inventoryTick(@NotNull AItemStack stack, @NotNull Level world, @NotNull Entity entity, int slot, boolean selected) {
         stack.getTrueItem().inventoryTick(stack, world, entity, slot, selected);
-    }
-
-    @Override
-    public @NotNull Component getDescription() {
-        Key key = getKey();
-        return Component.translatable("item." + key.namespace() + "." + key.value());
     }
 
     @Override

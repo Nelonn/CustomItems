@@ -18,7 +18,6 @@ package me.nelonn.customitems.mixin;
 
 import me.nelonn.customitems.api.AItemStack;
 import me.nelonn.customitems.utility.CraftUtil;
-import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -30,11 +29,13 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
+import java.util.List;
+
 @Mixin(ShapelessRecipe.class)
 public class ShapelessRecipeMixin {
 
     @Shadow @Final
-    NonNullList<Ingredient> ingredients;
+    List<Ingredient> ingredients;
 
     /**
      * @author Nelonn

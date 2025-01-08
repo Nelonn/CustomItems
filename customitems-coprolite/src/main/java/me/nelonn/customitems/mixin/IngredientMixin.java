@@ -16,57 +16,25 @@
 
 package me.nelonn.customitems.mixin;
 
+import me.nelonn.customitems.api.AItem;
 import me.nelonn.customitems.api.AItemStack;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-
-import javax.annotation.Nullable;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(Ingredient.class)
 public abstract class IngredientMixin {
 
-    @Shadow public boolean exact;
-
-    @Shadow public abstract ItemStack[] getItems();
-
-    @Shadow public abstract boolean isEmpty();
-
-    /**
-     * @author Nelonn
-     * @reason Prevent using nested items in recipes
-     */
-    @Overwrite
-    public boolean test(@Nullable ItemStack itemstack) {
-        if (itemstack == null) {
-            return false;
-        } else if (this.isEmpty()) {
-            return itemstack.isEmpty();
-        } else {
-            ItemStack[] aitemstack = this.getItems();
-            int i = aitemstack.length;
-
-            for (int j = 0; j < i; ++j) {
-                ItemStack itemstack1 = aitemstack[j];
-
-                // CraftBukkit start
-                if (this.exact) {
-                    if (itemstack1.getItem() == itemstack.getItem() && ItemStack.isSameItemSameComponents(itemstack, itemstack1)) {
-                        return true;
-                    }
-
-                    continue;
-                }
-                // CraftBukkit end
-
-                if (AItemStack.wrap(itemstack1).getItem() == AItemStack.wrap(itemstack).getItem()) { // CustomItems - Prevent using nested items in recipes
-                    return true;
-                }
-            }
-
-            return false;
+    @Redirect(method = "test(Lnet/minecraft/world/item/ItemStack;)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/core/HolderSet;)Z"))
+    private boolean special_test(ItemStack instance, HolderSet<Item> items) {
+        for (Holder<Item> holder : items) {
+            return AItemStack.wrap(instance).getItem() == AItem.wrap(holder.value());
         }
+        return false;
     }
 }
